@@ -1,14 +1,13 @@
+package controller;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
-
 import dao.TaiKhoanDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,9 +16,8 @@ import model.TaiKhoan;
 
 /**
  *
- * @author admin
+ * @author ADMIN
  */
-@WebServlet(name = "ChangePassServlet", urlPatterns = {"/ChangePassServlet"})
 public class ChangePassServlet extends HttpServlet {
 
     /**
@@ -34,33 +32,35 @@ public class ChangePassServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        //lấy thông tin password
         String oldpass = request.getParameter("oldpassword");
         String newpass = request.getParameter("newpassword");
         String confirmpass = request.getParameter("confirmpassword");
+
         if (!newpass.equals(confirmpass)) {
-            request.setAttribute("error", "Mật khẩu mới với mật khẩu xác nhận không trùng");
+            request.setAttribute("error", "Mật khẩu mới và mật khẩu mới xác nhận không trùng");
             request.getRequestDispatcher("changepass.jsp").forward(request, response);
         }
+
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
 
         TaiKhoanDAO tkDAO = new TaiKhoanDAO();
         TaiKhoan tk = tkDAO.checkLogin(username, oldpass);
-        if (tk != null) {
+        if (tk != null) //thành công
+        {
             tk.setMatkhau(newpass);
-            if (tkDAO.Update(tk)) {
-                response.sendRedirect("home.jsp");
-            } else {
-                request.setAttribute("error", "Cập nhật không thành công");
-                request.getRequestDispatcher("changepass.jsp").forward(request, response);
-            }
-        } else {
+            tkDAO.changePassword(tk);
+            request.getRequestDispatcher("home.jsp").forward(request, response);
+        } else //thất bại
+        {
             request.setAttribute("error", "Mật khẩu cũ không đúng");
+            //Chuyển tiếp về trang login
             request.getRequestDispatcher("changepass.jsp").forward(request, response);
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

@@ -22,14 +22,14 @@ public class TaiKhoanDAO {
 
     public TaiKhoan checkLogin(String tendanghap, String mkdangnhap) {
         TaiKhoan kq = null;
-        String sql = "select * from taikhoan where tendangnhap=? and mkdangnhap ";
+        String sql = "select * from taikhoan where tendangnhap=? and mkdangnhap=?";
         conn = DbContext.getConnection();
         try {
             ps = conn.prepareStatement(sql);
             ps.setString(1, tendanghap);
             ps.setString(2, mkdangnhap);
             rs = ps.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 kq = new TaiKhoan(rs.getString(1), rs.getString(2));
 
             }
@@ -41,7 +41,7 @@ public class TaiKhoanDAO {
 
     }
 
-    public boolean Update(TaiKhoan tk) {
+    public boolean changePassword(TaiKhoan tk) {
         String sql = "update taikhoan set mkdangnhap=? where tendangnhap=?";
         conn = DbContext.getConnection();
         try {

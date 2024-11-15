@@ -32,17 +32,24 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        TaiKhoanDAO tkDAO=new TaiKhoanDAO();
-        TaiKhoan tk=tkDAO.checkLogin(username, password);
-        if (username.equalsIgnoreCase("admin") && password.equals("admin")) {
+
+        
+        TaiKhoanDAO tkDAO = new TaiKhoanDAO();
+        TaiKhoan tk = tkDAO.checkLogin(username, password);
+        if (tk != null) 
+        {
+           
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
+            
             response.sendRedirect("home.jsp");
-        } else {
+        } else 
+        {
             request.setAttribute("error", "Đăng nhập thất bại do sai tên đăng nhập hoặc mật khẩu");
+           
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
