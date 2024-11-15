@@ -8,6 +8,7 @@ import dao.TaiKhoanDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import model.TaiKhoan;
  *
  * @author ADMIN
  */
+@WebServlet(name = "ChangePassServlet", urlPatterns = {"/doi-pass"})
 public class ChangePassServlet extends HttpServlet {
 
     /**
@@ -47,15 +49,15 @@ public class ChangePassServlet extends HttpServlet {
 
         TaiKhoanDAO tkDAO = new TaiKhoanDAO();
         TaiKhoan tk = tkDAO.checkLogin(username, oldpass);
-        if (tk != null) //thành công
+        if (tk != null) 
         {
-            tk.setMatkhau(newpass);
+            tk.setMkdangnhap(newpass);
             tkDAO.changePassword(tk);
             request.getRequestDispatcher("home.jsp").forward(request, response);
-        } else //thất bại
+        } else 
         {
             request.setAttribute("error", "Mật khẩu cũ không đúng");
-            //Chuyển tiếp về trang login
+            
             request.getRequestDispatcher("changepass.jsp").forward(request, response);
         }
     }

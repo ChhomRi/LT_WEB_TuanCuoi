@@ -12,7 +12,7 @@ Author     : ADMIN
 
 <div class="container">
     <h2>Change Password</h2>
-    <form action="ChangePassServlet" method="post">
+    <form action="doi-pass" method="post">
         <div>
             <label>Old Password</label>
             <input type="password" name="oldpassword" value="" required="" class="form-control">
